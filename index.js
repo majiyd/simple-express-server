@@ -1,9 +1,10 @@
 import express from 'express';
+import Joi from '@hapi/joi';
 
 const app = express();
 app.use(express.json());
 
-const contacts = [
+let contacts = [
   { id: 1, name: 'jean' },
   { id: 2, name: 'saul' },
   { id: 3, name: 'dave' },
@@ -19,13 +20,18 @@ app.get('/contacts', async (req, res) => {
 
 app.post('/contacts', async (req, res) => {
   try {
-    if (!req.body?.name) {
+    const schema = Joi.object({
+      name: Joi.string().required(),
+    });
+    const { error, value } = schema.validate(req.body);
+
+    if (error) {
       res.status(400).send('Contact must have a name');
       return;
     }
     const contact = {
       id: contacts.length + 1,
-      name: req.body.name,
+      name: value.name,
     };
     contacts.push(contact);
     res.status(201).send(contact);
@@ -43,6 +49,52 @@ app.get('/contacts/:id', async (req, res) => {
     : res.status(404).send(`Contact with id: ${id} not found`);
 });
 
+app.put('/contacts/:id', async (req, res) => {
+  try {
+    const nameSchema = Joi.object({
+      name: Joi.string().required(),
+    });
+    const idSchema = Joi.object({
+      id: Joi.number().less(contacts.length + 1).required(),
+    });
+
+    const isValidName = nameSchema.validate(req.body);
+    const isValidID = idSchema.validate(req.params);
+    console.log(isValidName.error, isValidID.error);
+
+    if (isValidName.error) {
+      res.status(400).send('Contact must have a name');
+      return;
+    }
+    if (isValidID.error) {
+      res.status(400).send(`ID is invalid, ${isValidID.error.message}`);
+      return;
+    }
+
+    const newContacts = contacts.map((contact) => {
+      if (contact.id === Number(req.params.id)) {
+        const c = {
+          id: contact.id,
+          name: req.body.name,
+        };
+        return c;
+      }
+      return contact;
+    });
+
+    const contact = {
+      id: req.params.id,
+      name: req.body.name,
+    };
+
+    contacts = newContacts;
+
+    res.status(200).send(contact);
+  } catch (e) {
+    console.log(e.message);
+    res.status(400).send(`Operation failed with Error: ${e.message}`);
+  }
+});
 
 // PORT
 const port = process.env.PORT || 3000;
