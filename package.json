@@ -1,0 +1,30 @@
+{
+  "name": "simple-express-server",
+  "version": "1.0.0",
+  "description": "Experiments and learning while building my first rest api",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/node": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-node": "^4.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "nodemon": "^2.0.1"
+  },
+  "scripts": {
+    "start": "nodemon --exec babel-node ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rest",
+    "node",
+    "express"
+  ],
+  "author": "Suleiman Majeed",
+  "license": "ISC"
+}
