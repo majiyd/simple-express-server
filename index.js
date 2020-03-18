@@ -15,7 +15,11 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/contacts', async (req, res) => {
-  res.status(200).send(contacts);
+  res.status(200).json({
+    status: 200,
+    message: 'Contacts fetched successfully',
+    data: contacts,
+  });
 });
 
 app.post('/contacts', async (req, res) => {
@@ -26,7 +30,11 @@ app.post('/contacts', async (req, res) => {
     const { error, value } = schema.validate(req.body);
 
     if (error) {
-      res.status(400).send('Contact must have a name');
+      res.status(400).json({
+        status: 400,
+        message: 'Contact must have a name',
+        data: { errorMessage: error.message },
+      });
       return;
     }
     const contact = {
@@ -93,6 +101,30 @@ app.put('/contacts/:id', async (req, res) => {
   } catch (e) {
     console.log(e.message);
     res.status(400).send(`Operation failed with Error: ${e.message}`);
+  }
+});
+
+app.delete('/contacts/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // check if is valid is
+    const schema = Joi.object({
+      id: Joi.number().required(),
+    });
+    const { error } = schema.validate(req.params);
+
+    if (error) return res.status(400).send(error.message);
+
+    // check if id exists
+    const filteredContacts = contacts.filter((contact) => contact.id !== Number(id));
+
+    if (filteredContacts.length === contacts.length) return res.status(404).send(`ID ${id} is invalid`);
+    // return ok
+    contacts = filteredContacts;
+    res.status(204).send(`Contact with id ${id} deleted`);
+  } catch (e) {
+    console.log('Failed with Error:', e.message);
   }
 });
 
