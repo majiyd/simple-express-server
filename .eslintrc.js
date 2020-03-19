@@ -25,6 +25,7 @@ module.exports = {
     "quotes": ["error", "single"],
     "no-use-before-define": ["error", { "functions": true, "classes": true, "variables": false }],
     "import/prefer-default-export": 0,
-    "no-console": 0,
+    "no-console": 1,
+    "consistent-return": "off",
   }
 };
