@@ -6,7 +6,7 @@ export default async (req, res) => {
   try {
     const { id } = req.params;
 
-    // check if is valid is
+    // check if id is valid
     const schema = Joi.object({
       id: Joi.number().required(),
     });
