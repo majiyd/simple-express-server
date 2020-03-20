@@ -1,3 +1,5 @@
+import db from '../../config/database';
+import { Contact } from '../../models/contacts';
 import contacts from '../../data';
 
 const getOne = async (req, res) => {
@@ -9,10 +11,19 @@ const getOne = async (req, res) => {
 };
 
 const getAll = async (req, res) => {
-  res.status(200).json({
-    status: 200,
-    message: 'Contacts fetched successfully',
-    data: contacts,
-  });
+  Contact.findAll()
+    .then((c) => {
+      res.status(200).json({
+        status: 200,
+        message: 'Contacts fetched successfully',
+        data: c,
+      });
+    }).catch((err) => {
+      res.status(400).json({
+        status: 400,
+        message: err.message,
+        errors: [err.message],
+      });
+    });
 };
 export { getOne, getAll };
