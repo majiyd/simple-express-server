@@ -1,4 +1,4 @@
-export default class GenerateResponse {
+export default class Response {
   static get(res, message, data) {
     return res.status(200).json({
       status: 200,

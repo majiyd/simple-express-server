@@ -1,6 +1,6 @@
 import Joi from '@hapi/joi';
 import { Contact } from '../../models/contacts';
-import GenerateResponse from '../../utils/generateResponse';
+import Response from '../../utils/response';
 
 
 const getOne = async (req, res) => {
@@ -9,7 +9,7 @@ const getOne = async (req, res) => {
   });
   const { error, value } = schema.validate(req.params);
 
-  if (error) return GenerateResponse.error(res, 'Error fetching contact', error.message);
+  if (error) return Response.error(res, 'Error fetching contact', error.message);
 
 
   const { id } = value;
@@ -20,23 +20,23 @@ const getOne = async (req, res) => {
   })
     .then((contact) => {
       if (Array.isArray(contact) && contact.length === 0) {
-        GenerateResponse.notFound(res, 'Error fetching contact', `Contact with id: ${id} not found`);
+        Response.notFound(res, 'Error fetching contact', `Contact with id: ${id} not found`);
         return;
       }
-      GenerateResponse.get(res, 'Contact fetched successfully', contact);
+      Response.get(res, 'Contact fetched successfully', contact);
     })
     .catch((err) => {
-      GenerateResponse.notFound(res, `Contact with id: ${id} not found`, err.message);
+      Response.notFound(res, `Contact with id: ${id} not found`, err.message);
     });
 };
 
 const getAll = async (req, res) => {
   Contact.findAll()
     .then((contacts) => {
-      GenerateResponse.get(res, 'Contacts fetched successfully', contacts);
+      Response.get(res, 'Contacts fetched successfully', contacts);
     })
     .catch((err) => {
-      GenerateResponse.error(res, 'Error fetching contacts', err.message);
+      Response.error(res, 'Error fetching contacts', err.message);
     });
 };
 

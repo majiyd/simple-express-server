@@ -1,7 +1,7 @@
 
 import Joi from '@hapi/joi';
 import { Contact } from '../../models/contacts';
-import GenerateResponse from '../../utils/generateResponse';
+import Response from '../../utils/response';
 
 
 export default async (req, res) => {
@@ -11,19 +11,19 @@ export default async (req, res) => {
     });
     const { error, value } = schema.validate(req.body);
 
-    if (error) return GenerateResponse.error(res, 'Contact must have a name', error.message);
+    if (error) return Response.error(res, 'Contact must have a name', error.message);
 
 
     const { name } = value;
 
     Contact.create({ name })
       .then((contact) => {
-        GenerateResponse.create(res, 'Contact created successfully', contact);
+        Response.create(res, 'Contact created successfully', contact);
       })
       .catch((err) => {
-        GenerateResponse.error(res, 'Error creating contact', err.message);
+        Response.error(res, 'Error creating contact', err.message);
       });
   } catch (error) {
-    GenerateResponse.error(res, `Operation failed with error: ${error.message}`, error.message);
+    Response.error(res, `Operation failed with error: ${error.message}`, error.message);
   }
 };
