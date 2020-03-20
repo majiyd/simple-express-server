@@ -1,19 +1,17 @@
 import Joi from '@hapi/joi';
 import { Contact } from '../../models/contacts';
+import GenerateResponse from '../../utils/generateResponse';
+
 
 const getOne = async (req, res) => {
   const schema = Joi.object({
     id: Joi.number().required(),
   });
   const { error, value } = schema.validate(req.params);
-  if (error) {
-    res.status(400).json({
-      status: 400,
-      message: 'Error fetching contact',
-      errors: [error.message],
-    });
-    return;
-  }
+
+  if (error) return GenerateResponse.error(res, 'Error fetching contact', error.message);
+
+
   const { id } = value;
   Contact.findAll({
     where: {
@@ -22,43 +20,23 @@ const getOne = async (req, res) => {
   })
     .then((contact) => {
       if (Array.isArray(contact) && contact.length === 0) {
-        res.status(404).json({
-          status: 404,
-          message: 'Error fetching contact',
-          errors: [`Contact with id: ${id} not found`],
-        });
+        GenerateResponse.notFound(res, 'Error fetching contact', `Contact with id: ${id} not found`);
         return;
       }
-      res.status(200).json({
-        status: 200,
-        message: 'Contact fetched successfully',
-        data: contact,
-      });
+      GenerateResponse.get(res, 'Contact fetched successfully', contact);
     })
     .catch((err) => {
-      res.status(404).json({
-        status: 404,
-        message: `Contact with id: ${id} not found`,
-        errors: [err.message],
-      });
+      GenerateResponse.notFound(res, `Contact with id: ${id} not found`, err.message);
     });
 };
 
 const getAll = async (req, res) => {
   Contact.findAll()
     .then((contacts) => {
-      res.status(200).json({
-        status: 200,
-        message: 'Contacts fetched successfully',
-        data: contacts,
-      });
+      GenerateResponse.get(res, 'Contacts fetched successfully', contacts);
     })
     .catch((err) => {
-      res.status(400).json({
-        status: 400,
-        message: 'Error fetching contacts',
-        errors: [err.message],
-      });
+      GenerateResponse.error(res, 'Error fetching contacts', err.message);
     });
 };
 

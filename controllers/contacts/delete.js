@@ -1,6 +1,7 @@
 
 import Joi from '@hapi/joi';
 import contacts from '../../data';
+import GenerateResponse from '../../utils/generateResponse';
 
 export default async (req, res) => {
   try {
@@ -12,7 +13,9 @@ export default async (req, res) => {
     });
     const { error } = schema.validate(req.params);
 
-    if (error) return res.status(400).send(error.message);
+    if (error) {
+      return GenerateResponse.error(res, 'Failed to delete contact', error.message);
+    }
 
     // check if id exists
     const filteredContacts = contacts.filter((contact) => contact.id !== Number(id));
