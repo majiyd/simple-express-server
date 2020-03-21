@@ -1,5 +1,6 @@
 import Joi from '@hapi/joi';
-import contacts from '../../data';
+import { Contact } from '../../models/contacts';
+import Response from '../../utils/response';
 
 export default async (req, res) => {
   try {
@@ -7,41 +8,37 @@ export default async (req, res) => {
       name: Joi.string().required(),
     });
     const idSchema = Joi.object({
-      id: Joi.number().less(contacts.length + 1).required(),
+      id: Joi.number().required(),
     });
 
     const isValidName = nameSchema.validate(req.body);
     const isValidID = idSchema.validate(req.params);
 
     if (isValidName.error) {
-      res.status(400).send('Contact must have a name');
-      return;
+      return Response.error(res, 'Contact must have a name', [isValidName.error.message]);
     }
     if (isValidID.error) {
-      res.status(400).send(`ID is invalid, ${isValidID.error.message}`);
-      return;
+      return Response.error(res, 'ID is invalid', [isValidID.error.message]);
     }
 
-    const newContacts = contacts.map((contact) => {
-      if (contact.id === Number(req.params.id)) {
-        const c = {
-          id: contact.id,
-          name: req.body.name,
-        };
-        return c;
-      }
-      return contact;
-    });
 
-    const contact = {
-      id: req.params.id,
-      name: req.body.name,
-    };
+    const { name, id } = { ...isValidName.value, ...isValidID.value };
 
-    contacts = newContacts;
-
-    res.status(200).send(contact);
-  } catch (e) {
-    res.status(400).send(`Operation failed with Error: ${e.message}`);
+    Contact.update({ name }, {
+      where: {
+        id,
+      },
+    })
+      .then((contact) => {
+        if (!contact[0]) {
+          return Response.notFound(res, 'Error deleting contact', [`Contact with id: ${id} doesn't exist`]);
+        }
+        Response.success(res, 'Contact updated successfully', { id, name });
+      })
+      .catch((err) => {
+        Response.error(res, `Operation failed with Error: ${err.message}`, [err.message]);
+      });
+  } catch (error) {
+    Response.error(res, `Operation failed with Error: ${error.message}`, [error.message]);
   }
 };

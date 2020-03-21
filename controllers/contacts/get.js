@@ -9,8 +9,9 @@ const getOne = async (req, res) => {
   });
   const { error, value } = schema.validate(req.params);
 
-  if (error) return Response.error(res, 'Error fetching contact', error.message);
-
+  if (error) {
+    return Response.error(res, 'Error fetching contact', error.message);
+  }
 
   const { id } = value;
   Contact.findAll({
@@ -20,20 +21,20 @@ const getOne = async (req, res) => {
   })
     .then((contact) => {
       if (Array.isArray(contact) && contact.length === 0) {
-        Response.notFound(res, 'Error fetching contact', `Contact with id: ${id} not found`);
+        Response.notFound(res, 'Error fetching contact', [`Contact with id: ${id} not found`]);
         return;
       }
-      Response.get(res, 'Contact fetched successfully', contact);
+      Response.success(res, 'Contact fetched successfully', contact);
     })
     .catch((err) => {
-      Response.notFound(res, `Contact with id: ${id} not found`, err.message);
+      Response.error(res, `Operation failed with Error: ${err.message}`, err.message);
     });
 };
 
 const getAll = async (req, res) => {
   Contact.findAll()
     .then((contacts) => {
-      Response.get(res, 'Contacts fetched successfully', contacts);
+      Response.success(res, 'Contacts fetched successfully', contacts);
     })
     .catch((err) => {
       Response.error(res, 'Error fetching contacts', err.message);

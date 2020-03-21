@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import router from './routes';
 import db from './config/database';
+import Response from './utils/response';
 
 const app = express();
 app.use(express.json());
@@ -14,11 +15,7 @@ db.authenticate()
 
 app.use('/', router);
 app.use(async (req, res) => {
-  res.status(404).json({
-    status: 404,
-    message: 'Resource not found',
-    errors: ['Resource not found'],
-  });
+  Response.notFound(res, 'Resource not found', ['Resource not found']);
 });
 
 // PORT

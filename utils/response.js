@@ -1,5 +1,5 @@
 export default class Response {
-  static get(res, message, data) {
+  static async success(res, message, data) {
     return res.status(200).json({
       status: 200,
       message,
@@ -15,11 +15,11 @@ export default class Response {
     });
   }
 
-  static async delete(res, message, data) {
+  static async delete(res, message) {
     return res.status(200).json({
       status: 200,
       message,
-      data,
+      data: null,
     });
   }
 

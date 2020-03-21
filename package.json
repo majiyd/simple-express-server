@@ -28,7 +28,10 @@
   "keywords": [
     "rest",
     "node",
-    "express"
+    "express",
+    "postgresql",
+    "sequelize",
+    "joi"
   ],
   "author": "Suleiman Majeed",
   "license": "ISC"
