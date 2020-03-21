@@ -15,11 +15,19 @@ export default class Response {
     });
   }
 
+  static async delete(res, message, data) {
+    return res.status(200).json({
+      status: 200,
+      message,
+      data,
+    });
+  }
+
   static async notFound(res, message, data) {
     return res.status(404).json({
       status: 404,
       message,
-      errors: [data],
+      errors: data,
     });
   }
 
@@ -28,7 +36,7 @@ export default class Response {
     return res.status(_status).json({
       status: _status,
       message,
-      errors: [data],
+      errors: data,
     });
   }
 }

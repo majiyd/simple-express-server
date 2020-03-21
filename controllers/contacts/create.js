@@ -11,7 +11,7 @@ export default async (req, res) => {
     });
     const { error, value } = schema.validate(req.body);
 
-    if (error) return Response.error(res, 'Contact must have a name', error.message);
+    if (error) return Response.error(res, 'Contact must have a name', [error.message]);
 
 
     const { name } = value;
@@ -21,9 +21,9 @@ export default async (req, res) => {
         Response.create(res, 'Contact created successfully', contact);
       })
       .catch((err) => {
-        Response.error(res, 'Error creating contact', err.message);
+        Response.error(res, 'Error creating contact', [err.message]);
       });
   } catch (error) {
-    Response.error(res, `Operation failed with error: ${error.message}`, error.message);
+    Response.error(res, `Operation failed with error: ${error.message}`, [error.message]);
   }
 };
