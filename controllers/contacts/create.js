@@ -1,6 +1,6 @@
 
 import Joi from '@hapi/joi';
-import { Contact } from '../../models/contacts';
+import { Contact } from '../../models';
 import Response from '../../utils/response';
 
 

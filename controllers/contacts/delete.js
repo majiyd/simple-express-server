@@ -1,7 +1,7 @@
 
 import Joi from '@hapi/joi';
 import Response from '../../utils/response';
-import { Contact } from '../../models/contacts';
+import { Contact } from '../../models';
 
 export default async (req, res) => {
   try {
