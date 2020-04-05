@@ -10,7 +10,7 @@ const getOne = async (req, res) => {
   const { error, value } = schema.validate(req.params);
 
   if (error) {
-    return Response.error(res, 'Error fetching contact', error.message);
+    return Response.error(res, 'Validation Error', error.message);
   }
 
   const { id } = value;

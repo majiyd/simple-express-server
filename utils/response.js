@@ -39,4 +39,12 @@ export default class Response {
       errors: data,
     });
   }
+
+  static async serverError(res, data) {
+    return res.status(500).json({
+      status: 500,
+      message: 'An unknown server error occured',
+      errors: data,
+    });
+  }
 }

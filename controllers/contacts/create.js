@@ -8,15 +8,16 @@ export default async (req, res) => {
   try {
     const schema = Joi.object({
       name: Joi.string().required(),
+      age: Joi.number().required(),
     });
     const { error, value } = schema.validate(req.body);
 
-    if (error) return Response.error(res, 'Contact must have a name', [error.message]);
+    if (error) return Response.error(res, 'Validation Error', [error.message]);
 
 
-    const { name } = value;
+    const { name, age } = value;
 
-    Contact.create({ name })
+    Contact.create({ name, age })
       .then((contact) => {
         Response.create(res, 'Contact created successfully', contact);
       })
@@ -24,6 +25,6 @@ export default async (req, res) => {
         Response.error(res, 'Error creating contact', [err.message]);
       });
   } catch (error) {
-    Response.error(res, `Operation failed with error: ${error.message}`, [error.message]);
+    Response.serverError(res, [error.message]);
   }
 };
