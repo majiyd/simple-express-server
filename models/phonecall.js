@@ -1,7 +1,10 @@
 
 export default (sequelize, DataTypes) => {
   const PhoneCall = sequelize.define('PhoneCall', {
-    uuid: DataTypes.UUIDV4,
+    uuid: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+    },
     type: DataTypes.STRING,
     callerID: DataTypes.INTEGER,
   }, {});
