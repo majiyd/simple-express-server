@@ -6,8 +6,7 @@ export default (sequelize, DataTypes) => {
   }, {});
   Contact.associate = (models) => {
     Contact.hasMany(models.PhoneCall, {
-      foreign_key: 'callerID',
-      as: 'phoneCalls',
+      foreignKey: 'id',
     });
   };
   return Contact;

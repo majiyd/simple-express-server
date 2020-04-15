@@ -3,7 +3,8 @@ import phoneCalls from '../controllers/phoneCalls';
 
 const router = express.Router();
 
-router.get('/', phoneCalls.getAll);
-router.post('/create', phoneCalls.create);
+router.get('/:uuid', phoneCalls.get);
+router.post('/', phoneCalls.create);
+
 
 export default router;

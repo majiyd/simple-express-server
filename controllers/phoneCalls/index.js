@@ -1,4 +1,4 @@
-import getAll from './get';
+import get from './get';
 import create from './create';
 
-export default { getAll, create };
+export default { get, create };

@@ -10,7 +10,7 @@ export default (sequelize, DataTypes) => {
   }, {});
   PhoneCall.associate = (models) => {
     PhoneCall.belongsTo(models.Contact, {
-      foreign_key: 'callerID',
+      foreignKey: 'callerID',
     });
   };
   return PhoneCall;
