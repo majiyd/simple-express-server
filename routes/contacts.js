@@ -9,6 +9,8 @@ router.post('/', Contacts.create);
 
 router.get('/:id', Contacts.getOne);
 
+router.get('/:id/phone-calls', Contacts.getPhoneCalls);
+
 router.put('/:id', Contacts.update);
 
 router.delete('/:id', Contacts.remove);
