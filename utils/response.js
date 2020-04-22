@@ -47,4 +47,12 @@ export default class Response {
       errors: data,
     });
   }
+
+  static async unAuthorized(res, data) {
+    return res.status(401).json({
+      status: 401,
+      message: 'Authorization failed',
+      errors: data,
+    });
+  }
 }
